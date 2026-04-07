@@ -142,32 +142,6 @@ jobs:
       uses: mxschmitt/action-tmate@master
       if: ${{ inputs.ssh || contains(github.event.action, 'ssh') }}
 
-
-    - name: Overclock A53 PLL (Dynamic Path)
-      run: |
-        echo "Searching for a53-pll.c..."
-        # 1. 全盘搜索文件的真实绝对路径，并保存到变量中
-        TARGET_FILE=$(find / -name a53-pll.c 2>/dev/null | head -n 1)
-        
-        if [ -z "$TARGET_FILE" ]; then
-          echo "❌ Critical Error: a53-pll.c NOT FOUND anywhere on the system!"
-          exit 1
-        fi
-        
-        echo "✅ Found file at: $TARGET_FILE"
-        echo "Applying overclocking..."
-        
-        # 2. 使用动态获取的绝对路径进行 sed 替换
-        sed -i 's/{ 998400000, 52, 0x0, 0x1, 0 },/{ 1401600000, 73, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1094400000, 57, 0x0, 0x1, 0 },/{ 1516800000, 79, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1152000000, 62, 0x0, 0x1, 0 },/{ 1612800000, 84, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1209600000, 63, 0x0, 0x1, 0 },/{ 1728000000, 90, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1248000000, 65, 0x0, 0x1, 0 },/{ 1843200000, 96, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1363200000, 71, 0x0, 0x1, 0 },/{ 1958400000, 102, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        sed -i 's/{ 1401600000, 73, 0x0, 0x1, 0 },/{ 2016000000, 105, 0x0, 0x1, 0 },/g' "$TARGET_FILE"
-        
-        echo "Overclocking applied successfully to $TARGET_FILE!"
-      
       
     - name: Config defconfig
       id: config
@@ -205,6 +179,17 @@ jobs:
       id: compile
       run: |
         cd openwrt
+        echo "--- Starting Final Overclocking ---"
+        # 直接在编译开始前的一秒钟，在已经成功 cd 进来的目录下进行修改
+        sed -i 's/{ 998400000, 52, 0x0, 0x1, 0 },/{ 1401600000, 73, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1094400000, 57, 0x0, 0x1, 0 },/{ 1516800000, 79, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1152000000, 62, 0x0, 0x1, 0 },/{ 1612800000, 84, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1209600000, 63, 0x0, 0x1, 0 },/{ 1728000000, 90, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1248000000, 65, 0x0, 0x1, 0 },/{ 1843200000, 96, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1363200000, 71, 0x0, 0x1, 0 },/{ 1958400000, 102, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1401600000, 73, 0x0, 0x1, 0 },/{ 2016000000, 105, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        echo "Overclocking applied! Starting build..."
+        
         echo -e "$(nproc) thread compile"
         make -j$(nproc) || make -j1 V=s
         echo "status=success" >> $GITHUB_OUTPUT
