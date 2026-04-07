@@ -145,14 +145,16 @@ jobs:
 
     - name: Overclock A53 PLL (Force Replace)
       run: |
+        cd openwrt
         echo "Applying overclocking to a53-pll.c..."
-        sed -i 's/{ 998400000, 52, 0x0, 0x1, 0 },/{ 1401600000, 73, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1094400000, 57, 0x0, 0x1, 0 },/{ 1516800000, 79, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1152000000, 62, 0x0, 0x1, 0 },/{ 1612800000, 84, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1209600000, 63, 0x0, 0x1, 0 },/{ 1728000000, 90, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1248000000, 65, 0x0, 0x1, 0 },/{ 1843200000, 96, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1363200000, 71, 0x0, 0x1, 0 },/{ 1958400000, 102, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
-        sed -i 's/{ 1401600000, 73, 0x0, 0x1, 0 },/{ 2016000000, 105, 0x0, 0x1, 0 },/g' /mnt/openwrt/drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 998400000, 52, 0x0, 0x1, 0 },/{ 1401600000, 73, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1094400000, 57, 0x0, 0x1, 0 },/{ 1516800000, 79, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1152000000, 62, 0x0, 0x1, 0 },/{ 1612800000, 84, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1209600000, 63, 0x0, 0x1, 0 },/{ 1728000000, 90, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1248000000, 65, 0x0, 0x1, 0 },/{ 1843200000, 96, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1363200000, 71, 0x0, 0x1, 0 },/{ 1958400000, 102, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        sed -i 's/{ 1401600000, 73, 0x0, 0x1, 0 },/{ 2016000000, 105, 0x0, 0x1, 0 },/g' drivers/clk/qcom/a53-pll.c
+        
         echo "Overclocking applied successfully!"
       
       
